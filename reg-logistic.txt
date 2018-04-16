@@ -1,0 +1,18 @@
+import statsmodels.formula.api as sm
+import pandas as pd
+
+df=pd.read_csv("http://rstatistics.net/wp-content/uploads/2015/09/adult.csv")
+y=df["ABOVE50K"]
+print(y)
+X = df[['EDUCATIONNUM', 'AGE']]
+print(X)
+#x1=df["RELATIONSHIP"]
+#x2=df["AGE"]
+#x3=df["CAPITALGAIN"]
+#x4=df["OCCUPATION"]
+#x5=df["EDUCATIONNUM"
+model = sm.Logit(y, X)
+ 
+result = model.fit()
+
+result.summary()

@@ -1,0 +1,47 @@
+import pandas as pd
+import numpy as np
+import statsmodels.formula.api as smf
+labels=('in_num','num_burger')
+row1=(566, 444, 454, 440, 760, 881, 1091, 783, 666, 564, 750,
+650, 1054, 1245, 616, 564, 652, 704, 683, 1125, 1294, 676, 557, 568,
+450, 748, 1371, 1297, 615, 568)
+row2=(2728, 2098, 2111, 2009, 3635, 4171, 5244, 3695, 3088, 2674,
+3591, 3013, 5045, 6118, 2851, 2698, 3015, 3409, 3179, 5510, 6232,
+3211, 2582, 2710, 2115, 3515, 6665, 6239, 2862, 2665)
+df = pd.DataFrame(np.array((row1,row2)))
+df=df.transpose()
+df.columns=labels
+print(df)
+bur_reg=smf.ols(formula='num_burger~in_num',data=df).fit()
+bur_reg.summary()
+
+--------------------scatter plot----------------------------------------------------
+
+import matplotlib.pyplot as plt
+plt.plot(df['in_num'],df['num_burger'])
+plt.show()
+
+
+-------------------------vif-------------------------------------------------------
+
+import pandas as pd
+import numpy as np
+from patsy import dmatrices
+import statsmodels.api as sm
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+
+df = pd.read_csv('D:/valli/python/Petrol Consumption.csv')
+df.dropna()
+df = df._get_numeric_data() #drop non-numeric cols
+
+df.head()
+
+df = df[['Prop_pop_drivers_licenses','Consum_mill_gallons', 'Petrol_tax_cents_per_gallon']].dropna()
+
+
+# get y and X dataframes based on this regression:
+y, X = dmatrices('Prop_pop_drivers_licenses ~ Consum_mill_gallons + Petrol_tax_cents_per_gallon', df, return_type='dataframe')
+vif = pd.DataFrame()
+vif["VIF Factor"] = [variance_inflation_factor(X.values, i) for i in range(X.shape[1])]
+vif["features"] = X.columns
+vif.round(1)
