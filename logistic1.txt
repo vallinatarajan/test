@@ -1,0 +1,26 @@
+import statsmodels.api as sm
+import pandas as pd
+
+df=pd.read_csv("http://rstatistics.net/wp-content/uploads/2015/09/adult.csv")
+y=df["ABOVE50K"]
+print(y)
+X = df['EDUCATIONNUM']
+print(X)
+
+from scipy import stats
+stats.chisqprob = lambda chisq, df: stats.chi2.sf(chisq, df)
+#x1=df["RELATIONSHIP"]
+#x2=df["AGE"]
+#x3=df["CAPITALGAIN"]
+#x4=df["OCCUPATION"]
+#x5=df["EDUCATIONNUM"
+model = sm.Logit(df["ABOVE50K"],df["EDUCATIONNUM"])
+ 
+result = model.fit()
+
+print(result.summary())
+
+----------------------------plot-------------------------------------------------------------
+
+import seaborn as sns
+sns.regplot(x=df['EDUCATIONNUM'], y=df["ABOVE50K"], logistic=True)

@@ -1,0 +1,42 @@
+import matplotlib.pyplot as plt
+import pandas as pd
+
+from sklearn import datasets
+from sklearn.decomposition import PCA
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+
+gender = pd.read_csv("D:/valli/GenderDiscrimination.csv")
+
+X = gender.iloc[:,1:3]
+print(X)
+y = gender.Gender
+print(y)
+sex=["male","female"]
+
+#target_names = iris.target_names
+
+pca = PCA(n_components=2)
+print(PCA)
+X_r = pca.fit(X).transform(X)
+print(X_r)
+
+
+
+# Percentage of variance explained for each components
+print('explained variance ratio (first two components): %s'
+      % str(pca.explained_variance_ratio_))
+
+plt.figure()
+colors = ['navy', 'turquoise', 'darkorange']
+lw = 2
+
+for color, i, sexes in zip(colors, [0, 1], ["male","female"]):
+    print(X_r[y == i, 0])
+    plt.scatter(X_r[:,0], X_r[:,1], color=color, alpha=.10, lw=lw,
+                label=sexes)
+plt.legend(loc='best', shadow=False, scatterpoints=1)
+plt.title('PCA of gender dataset')
+
+
+
+plt.show()
